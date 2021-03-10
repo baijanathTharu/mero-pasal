@@ -15,7 +15,7 @@ export class UserService {
       let newUser = new User();
       newUser = { ...createUserDto };
       const savedUser = await this.userRepo.save(newUser);
-      return savedUser;
+      return { data: savedUser, message: 'success' };
     } catch (error) {
       return { error };
     }
@@ -28,7 +28,8 @@ export class UserService {
   async findOne(id: number) {
     try {
       const user = await this.userRepo.findOne(id);
-      return user;
+      if (!user) return { data: {}, message: 'No user exist with this id' };
+      return { data: user, message: 'success' };
     } catch (error) {
       return { error };
     }
@@ -39,7 +40,7 @@ export class UserService {
       let userToUpdate = await this.userRepo.findOne(id);
       userToUpdate = { ...userToUpdate, ...updateUserDto };
       const updatedUser = await this.userRepo.save(userToUpdate);
-      return updatedUser;
+      return { data: updatedUser, message: 'success' };
     } catch (error) {
       return { error };
     }
@@ -49,7 +50,7 @@ export class UserService {
     try {
       const userToRemove = await this.userRepo.findOne(id);
       const removedUser = await this.userRepo.remove(userToRemove);
-      return removedUser;
+      return { data: removedUser, message: 'success' };
     } catch (error) {
       return { error };
     }
@@ -75,6 +76,7 @@ export class UserService {
         page: paginationDto.page,
         limit: paginationDto.limit,
         data: items,
+        message: 'success',
       };
     } catch (error) {
       return { error };
