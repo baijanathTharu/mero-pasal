@@ -8,6 +8,8 @@ import { SessionEntity } from './auth/session.entity';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { User } from './user/entities/user.entity';
+import { ShopModule } from './shop/shop.module';
+import { Product } from './product/entities/product.entity';
 
 /**
  * production => .env.production
@@ -42,12 +44,13 @@ switch (process.env.ENVIRONMENT) {
       port: Number.parseInt(process.env.MYSQL_DB_PORT),
       password: process.env.MYSQL_DB_PASSWORD,
       database: process.env.MYSQL_DB_NAME,
-      entities: [SessionEntity, User],
+      entities: [SessionEntity, User, Product],
       synchronize: true,
     }),
     GoogleModule,
     UserModule,
     ProductModule,
+    ShopModule,
   ],
   controllers: [AppController],
   providers: [AppService],

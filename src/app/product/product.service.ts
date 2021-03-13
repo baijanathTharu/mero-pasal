@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
+import { SearchProductDto } from './dto/search-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './entities/product.entity';
+import { ProductRepository } from './product.repository';
 
 @Injectable()
 export class ProductService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(
+    @InjectRepository(Product) private productRepository: ProductRepository,
+  ) {}
+  createProduct(createProductDto: CreateProductDto) {
+    return this.productRepository.createProduct(createProductDto);
   }
 
-  findAll() {
-    return `This action returns all product`;
+  getAllProduct() {
+    return this.productRepository.getAllProduct();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  searchProducts(searchProductDto: SearchProductDto) {
+    return this.productRepository.searchProducts(searchProductDto);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  getProductById(id: number) {
+    return this.productRepository.getProductById(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  updateProduct(id: number, updateProductDto: UpdateProductDto) {
+    return this.productRepository.updateProduct(id, updateProductDto);
+  }
+
+  deleteProduct(id: number) {
+    return this.productRepository.deleteProduct(id);
   }
 }

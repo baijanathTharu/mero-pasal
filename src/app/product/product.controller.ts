@@ -1,34 +1,54 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  ValidationPipe,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { SearchProductDto } from './dto/search-product.dto';
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  createProduct(@Body(ValidationPipe) createProductDto: CreateProductDto) {
+    return this.productService.createProduct(createProductDto);
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  getAllProducts() {
+    return this.productService.getAllProduct();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  @Get('search')
+  searchProducts(@Query(ValidationPipe) searchProductDto: SearchProductDto) {
+    return this.productService.searchProducts(searchProductDto);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  @Get('/:id')
+  getProductById(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.getProductById(id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  @Put('/:id')
+  updateProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe) updateProductDto: UpdateProductDto,
+  ) {
+    return this.productService.updateProduct(id, updateProductDto);
+  }
+
+  @Delete('/:id')
+  deleteProduct(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.deleteProduct(id);
   }
 }
