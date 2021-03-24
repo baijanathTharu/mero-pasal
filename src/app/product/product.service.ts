@@ -11,6 +11,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product) private productRepository: ProductRepository,
   ) {}
+
   createProduct(createProductDto: CreateProductDto) {
     return this.productRepository.createProduct(createProductDto);
   }
