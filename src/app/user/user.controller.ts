@@ -7,64 +7,48 @@ import {
   Param,
   Delete,
   Query,
+  ValidationPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { SearchUserDto } from './dto/search-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PaginationDto } from './dto/pagination.dto';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  createUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 
-  @Get('all')
-  findAll(@Query() paginationDto: PaginationDto) {
-    paginationDto.page = Number(paginationDto.page);
-    paginationDto.limit = Number(paginationDto.limit);
-
-    return this.userService.findAll(
-      {},
-      {
-        ...paginationDto,
-        limit: paginationDto.limit > 10 ? 10 : paginationDto.limit,
-      },
-    );
+  @Get()
+  getAllUsers() {
+    return this.userService.getAllUsers();
   }
 
-  @Get('search')
-  search(
-    @Query() paginationDto: PaginationDto,
-    @Body() condition: UpdateUserDto,
+  @Get('/search')
+  searchUsers(@Query(ValidationPipe) searchUserDto: SearchUserDto) {
+    return this.userService.searchUsers(searchUserDto);
+  }
+
+  @Get('/:id')
+  getUserById(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.getUserById(id);
+  }
+
+  @Put('/:id')
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
   ) {
-    paginationDto.page = Number(paginationDto.page) || 1;
-    paginationDto.limit = Number(paginationDto.limit) || 5;
-
-    return this.userService.search(
-      { ...condition },
-      {
-        ...paginationDto,
-        limit: paginationDto.limit > 10 ? 10 : paginationDto.limit,
-      },
-    );
+    return this.userService.updateUser(id, updateUserDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
-
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Delete('/:id')
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.deleteUser(id);
   }
 }

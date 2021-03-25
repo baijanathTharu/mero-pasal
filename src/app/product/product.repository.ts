@@ -18,7 +18,7 @@ export class ProductRepository extends Repository<Product> {
     return product;
   }
 
-  async getAllProduct(): Promise<Product[]> {
+  async getAllProducts(): Promise<Product[]> {
     const query = this.createQueryBuilder();
 
     const products = await query.getMany();

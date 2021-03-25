@@ -16,8 +16,8 @@ export class ProductService {
     return this.productRepository.createProduct(createProductDto);
   }
 
-  getAllProduct() {
-    return this.productRepository.getAllProduct();
+  getAllProducts() {
+    return this.productRepository.getAllProducts();
   }
 
   searchProducts(searchProductDto: SearchProductDto) {
