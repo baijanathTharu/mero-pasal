@@ -14,8 +14,9 @@ export class AuthenticationGuard implements CanActivate {
       if (req.session.passport.user) {
         return true;
       }
+      throw new UnauthorizedException(`Unauthorized`);
     } catch (e) {
-      throw new UnauthorizedException();
+      throw new Error(e);
     }
   }
 }

@@ -8,11 +8,13 @@ import { User } from './entities/user.entity';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { username, password } = createUserDto;
+    const { first_name, last_name, email, service_id } = createUserDto;
 
     const user = new User();
-    user.username = username;
-    user.password = password;
+    user.first_name = first_name;
+    user.last_name = last_name;
+    user.email = email;
+    user.service_id = service_id;
 
     await user.save();
     return user;
@@ -48,15 +50,15 @@ export class UserRepository extends Repository<User> {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const { username, password } = updateUserDto;
+    const { first_name, last_name } = updateUserDto;
 
     const user = await this.getUserById(id);
 
-    if (username) {
-      user.username = username;
+    if (first_name) {
+      user.first_name = first_name;
     }
-    if (password) {
-      user.password = password;
+    if (last_name) {
+      user.last_name = last_name;
     }
 
     await user.save();
