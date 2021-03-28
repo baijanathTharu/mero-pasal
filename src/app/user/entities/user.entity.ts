@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Shop } from 'src/app/shop/entities/shop.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -16,4 +23,7 @@ export class User extends BaseEntity {
 
   @Column()
   service_id: string;
+
+  @OneToMany((type) => Shop, (shop) => shop.user, { eager: true })
+  shops: Shop[];
 }

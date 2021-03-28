@@ -30,7 +30,7 @@ export class GoogleController {
      * accessToken
      */
 
-    return this.googleService.createUser(user);
+    return user;
   }
 
   @Get('status')
